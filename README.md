@@ -1,6 +1,6 @@
 # Jaroslav Holaň - Java Demo app
 
-This is example of my experiments with some software technologies.
+This is an example of my experiments with some software technologies.
 
 ## Prerequisites
 
