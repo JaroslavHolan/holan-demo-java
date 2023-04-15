@@ -10,7 +10,7 @@ You need the following:
 - Maven
 
 During the local setup you'll get docker image running for:
-- Postgres DB (running on default port `5432`)
+- MySQL DB (running on default port `3306`)
 
 ## Initial local setup
 You can set up the project manually but who like manual setups? :-) 
@@ -22,22 +22,21 @@ If you want you can use the script `init.sh` to set up the project. Just run `sh
 #### Use following command to create functional container with database:
 
 You can use default password or update it with your own.
-```
-docker run --name holandb -e POSTGRES_PASSWORD=holandb -p 5432:5432 -d postgres:15.2
+```bash
+docker run --name holan-mysql -e MYSQL_ROOT_PASSWORD=holan -p 3306:3306 -d mysql:8.0.32
 ```
 
 #### Create user and db in container. 
 
 Go to the container shell:
-```
-docker exec -it holandb bash
+```bash
+docker exec -it holan-mysql mysql -uroot -pholan
 ```
 Then run the following commands. You can use default password or update it with your own.
-```
-createuser -U postgres demouser
-createdb -U postgres demojava
-psql -U postgres -c "alter user demouser with encrypted password 'demouser'"
-psql -U postgres -c "grant all privileges on database demojava to demouser"
+```bash
+CREATE USER 'demouser'@'%' IDENTIFIED BY 'demouser';
+CREATE DATABASE demojava;
+GRANT ALL PRIVILEGES ON demojava.* TO 'demouser'@'%';
 ```
 
 ### Setup secrets

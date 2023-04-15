@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Create Docker container with Postgres database
-docker run --name holandb -e POSTGRES_PASSWORD=holandb -p 5432:5432 -d postgres:15.2
+# Create Docker container with MySQL database
+docker run --name holan-mysql -e MYSQL_ROOT_PASSWORD=holan -p 3306:3306 -d mysql:8.0.32
 
 # Wait 10 seconds. If it is not enough, wait until the container is ready and then run the script again.
 echo "Waiting 10 seconds for container to be ready."
@@ -10,10 +10,9 @@ echo "Container is ready"
 
 # Create user and db in container.
 # Note: If you want change username and password to your own values.
-docker exec holandb createuser -U postgres demouser
-docker exec holandb createdb -U postgres demojava
-docker exec holandb psql -U postgres -c "alter user demouser with encrypted password 'demouser'"
-docker exec holandb psql -U postgres -c "grant all privileges on database demojava to demouser"
+docker exec -it holan-mysql mysql -uroot -pholan -e "CREATE USER 'demouser'@'%' IDENTIFIED BY 'demouser'; \
+CREATE DATABASE demojava; \
+GRANT ALL PRIVILEGES ON demojava.* TO 'demouser'@'%';"
 
 # Setup secrets
 cp src/main/resources/application-secrets-sample.yml src/main/resources/application-secrets.yml
